@@ -1,0 +1,15 @@
+{% extends 'base.html'%}
+{% block section %}
+    <h1>Bienvenido a Frikr</h1>
+    <p>Frikr es como Flikr, pero en friki</p>
+    {% if photos|length > 0 %}
+        <h2>Últimas fotos publicadas</h2>
+    {% else %}
+        <h2>Sé el primero en publicar una foto!</h2>
+    {% endif %}
+    {% for photo in photos %}
+        <a href="{% url 'photo_detail' photo.pk %}">
+            <img src="{{ photo.url}}" alt="{{photo.name}}" height="150">
+        </a>
+    {% endfor %}
+{% endblock %}
