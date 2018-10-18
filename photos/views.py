@@ -25,7 +25,10 @@ def detail(request, pk):
     :param pk: id de la photo
     :return: HttpResponse
     """
-    possible_photos = Photo.objects.filter(pk=pk)
+    possible_photos = Photo.objects.filter(pk=pk).select_related('owner')
+    #JOIN Solo una llamada
+    #sino haria dos llamdas para photo y para user
+    #relacion reversa  prefec
     photo = possible_photos[0] if len(possible_photos) == 1 else None
     if photo:
         #Cargar template detatlle
@@ -45,7 +48,7 @@ def create(request):
     :return: HttpResponse
     """
     error_messages = []
-    success_message = []
+    success_message = ''
     if request.method == "POST":
         photo_with_owner = request.user #usuario autenticado
         form = PhotoForm(request.POST, instance=photo_with_owner)

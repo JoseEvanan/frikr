@@ -125,6 +125,13 @@ LICENSES = (
     ('DSH', 'Dr. Schutz')
 )
 
+### BADWORDS http://goo.gl/G2nCu7
+PROJECT_BADWORDS = ['Abollao',
+            'Abrazafarolas',
+            'Afilasables',
+            'Analfabestia',
+            'Apollardao']
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 

@@ -11,3 +11,5 @@ DEFAULT_LICENSES = (
 )
 
 LICENSES = getattr(settings, 'LICENSES', DEFAULT_LICENSES)
+
+BADWORDS = getattr(settings, 'PROJECT_BADWORDS', [])
