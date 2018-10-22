@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework import status
-
+from rest_framework.pagination import PageNumberPagination
 from users.serializers import UserSerializer
 from django.shortcuts import get_object_or_404
 
@@ -25,9 +25,14 @@ class UserListAPI(APIView):
         """
         API users
         """
+        paginator = PageNumberPagination()
         users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response (serializer.data)
+        #Paginar el queryset
+        paginator.paginate_queryset(users, request)
+        serializer = UserSerializer(users, many=True) #Lista de diccionarios
+        serializer_users = serializer.data
+        #Devolverla respuesta paginada
+        return paginator.get_paginated_response(serializer_users)
     
     def post(self, request):
         """

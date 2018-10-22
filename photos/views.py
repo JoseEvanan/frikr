@@ -90,7 +90,6 @@ class CreateView(View):
         :param request: HttpRequest
         :return: HttpResponse
         """
-        return super(CreateView, self).get(request)
         form = PhotoForm()
         context = {
             'form': form
@@ -106,10 +105,14 @@ class CreateView(View):
         """
         error_messages = []
         success_message = ''
-        photo_with_owner = request.user  # usuario autenticado
+        photo_with_owner = Photo()
+        photo_with_owner.owner = request.user  # usuario autenticado
         form = PhotoForm(request.POST, instance=photo_with_owner)
         if form.is_valid():
+            print("FORMULARIO VALIDO")
             new_photo = form.save()  # Guarda el objeto y devolver
+            print(new_photo)
+            print("GUARDAR OBJETO")
             form = PhotoForm()
             success_message = "Guardado con éxito!"
             success_message += "<a href='{0}'>".format(

@@ -133,6 +133,12 @@ PROJECT_BADWORDS = ['Abollao',
             'Analfabestia',
             'Apollardao']
 
+###REST FRAMEWORK SETTINGS
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 3
+}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 

@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 
-from photos.api import PhotoListAPI
+from photos.api import PhotoDetailAPI, PhotoListAPI
 from photos.views import CreateView, DetailView, HomeView, PhotoListView, \
     UserPhotosView
 from users.api import UserDetailAPI, UserListAPI
@@ -36,8 +36,10 @@ urlpatterns = [
     url(r'^my-photos/$', login_required(UserPhotosView.as_view()), name="user_photos"),
 
     #Photos API URLs
-    url(r'^api/1.0/photos/$', PhotoListAPI.as_view(), name='user_list_api'),
-
+    url(r'^api/1.0/photos/$', PhotoListAPI.as_view(), name='photo_list_api'),
+    url(r'^api/1.0/photos/(?P<pk>[0-9]+)/$',
+        PhotoDetailAPI.as_view(), name='photo_detail_api'),
+    
 
     #Users URLs
     url(r'^login$', LoginView.as_view(), name='users_login'),
