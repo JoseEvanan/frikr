@@ -63,3 +63,4 @@ class LogoutView(View):
         return redirect('photos_home')
 
 
+

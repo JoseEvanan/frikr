@@ -17,9 +17,13 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 
-from photos.views import (HomeView, DetailView, CreateView, PhotoListView,
-                            UserPhotosView)
+from photos.api import PhotoListAPI
+from photos.views import CreateView, DetailView, HomeView, PhotoListView, \
+    UserPhotosView
+from users.api import UserDetailAPI, UserListAPI
 from users.views import LoginView, LogoutView
+
+
 # r le dice que es una expresion regular  -^ iniciode cadena - $ fin de cadena
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -30,8 +34,19 @@ urlpatterns = [
     url(r'^photos/new/$', CreateView.as_view(), name="photo_create"),
     url(r'^photos/$', PhotoListView.as_view(), name="photos_list"),
     url(r'^my-photos/$', login_required(UserPhotosView.as_view()), name="user_photos"),
+
+    #Photos API URLs
+    url(r'^api/1.0/photos/$', PhotoListAPI.as_view(), name='user_list_api'),
+
+
     #Users URLs
     url(r'^login$', LoginView.as_view(), name='users_login'),
-    url(r'^logout$', LogoutView.as_view(), name='users_logout')
+    url(r'^logout$', LogoutView.as_view(), name='users_logout'),
+
+
+    #USers API URLs
+    url(r'^api/1.0/users/$', UserListAPI.as_view(), name='user_list_api'),
+    url(r'^api/1.0/users/(?P<pk>[0-9]+)/$', UserDetailAPI.as_view(), name='user_detail_api')
+    
 ]
 #path('accounts/', include('accounts.urls')),
