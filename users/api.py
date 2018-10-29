@@ -8,8 +8,15 @@ from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from users.serializers import UserSerializer
 from django.shortcuts import get_object_or_404
+from users.permissions import UserPermission
 
 """
+admin
+1234
+
+jose
+Maucaylle2018
+-----------
 #View personalizada
 class UserListAPI(View):
     def get(self, request, *args, **kwargs):
@@ -21,10 +28,17 @@ class UserListAPI(View):
         return HttpResponse(json_users)"""
 
 class UserListAPI(APIView):
+
+    permission_classes = (UserPermission,)
+
     def get(self, request, *args, **kwargs):
         """
         API users
+        #Plitic:
+        - Si la peticion es GET dejar acceder si esta authenticado
+        - Si la peticion es POST
         """
+        self.check_permissions(request)
         paginator = PageNumberPagination()
         users = User.objects.all()
         #Paginar el queryset
@@ -40,6 +54,7 @@ class UserListAPI(APIView):
         :param request: HttpRequest
         :return: HttpResponse
         """
+        self.check_permissions(request)
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             new_user = serializer.save()
@@ -49,11 +64,20 @@ class UserListAPI(APIView):
                            status=status.HTTP_400_BAD_REQUEST)
 
 class UserDetailAPI(APIView):
+    """
+    GET : solo authenticado
+    PUT: si no es superadmin solo actualiza su usuario
+
+    """
+    permission_classes = (UserPermission,)
+
     def get(self, request, *args, **kwargs):
         """
         API users
         """
+        self.check_permissions(request)
         user = get_object_or_404(User, pk=kwargs.get('pk')) #Leer como retorna si salir del metodo
+        self.check_object_permissions(request, user)
         serializer = UserSerializer(user)
         return Response (serializer.data)
     
@@ -61,8 +85,10 @@ class UserDetailAPI(APIView):
         """
         API users
         """
-        user = get_object_or_404(User, pk=kwargs.get(
-            'pk'))  # Leer como retorna si salir del metodo
+
+        self.check_permissions(request)
+        user = get_object_or_404(User, pk=kwargs.get('pk'))  # Leer como retorna si salir del metodo
+        self.check_object_permissions(request, user)
         serializer = UserSerializer(instance=user, data=request.data)
         if serializer.is_valid():
             new_user = serializer.save()
@@ -75,8 +101,9 @@ class UserDetailAPI(APIView):
         """
         API users
         """
-        user = get_object_or_404(User, pk=kwargs.get(
-            'pk'))  # Leer como retorna si salir del metodo
+        self.check_permissions(request)
+        user = get_object_or_404(User, pk=kwargs.get('pk'))  # Leer como retorna si salir del metodo
+        self.check_object_permissions(request, user)
         user.delete()
         #serializer = UserSerializer(instance=user, data=request.data)
         return Response(status=status.HTTP_204_NO_CONTENT)

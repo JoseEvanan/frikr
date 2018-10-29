@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from nbformat import ValidationError
+
 
 from photos.models import Photo
 from photos.settings import BADWORDS
@@ -14,4 +14,4 @@ class PhotoForm(forms.ModelForm):
         model = Photo
         exclude = ['owner']
 
-        
+
